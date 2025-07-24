@@ -362,7 +362,7 @@
                     >>> CURRENTLY LOGGED IN FROM WALES <<<
         </div>
 
-        <section class="section">
+        <section class="section" id="system-status">
             <div class="section-header">SYSTEM STATUS</div>
             <div>
                 <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">whoami</span></div>
@@ -381,26 +381,26 @@
         <section class="section">
             <div class="section-header">DIRECTORY LISTING - /HOME/SPUFIDOO/PROJECTS</div>
             <div class="file-listing">
-                <div class="file-item">
+                <div class="file-item" data-target="system-status">
                     <div class="file-name">DATABASE_COST_OPTIMIZATION.sql</div>
                     <div class="file-desc">Revolutionary approach to driving down database development costs while maintaining peak performance</div>
                 </div>
-                <div class="file-item">
+                <div class="file-item" data-target="system-status">
                     <div class="file-name">MAINFRAME_MODERNIZATION.cbl</div>
                     <div class="file-desc">Legacy system transformation without losing the soul of the mainframe</div>
                 </div>
-                <div class="file-item">
+                <div class="file-item" data-target="speaking-log">
                     <div class="file-name">CONFERENCE_TALKS/</div>
                     <div class="file-desc">Collection of presentations on SQL rebellion, mainframe mastery, and cost optimization</div>
                 </div>
-                <div class="file-item">
+                <div class="file-item" data-target="establish-connection">
                     <div class="file-name">RACHMANINOV_PRACTICE.mid</div>
                     <div class="file-desc">Musical escape from the digital realm - Prélude in C# minor progression logs</div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="speaking-log">
             <div class="section-header">RECENT SYSTEM LOG - /VAR/LOG/SPEAKING.LOG</div>
             <div>
                 <div>[INFO] Successfully executed presentation: "Driving Down Database Development Dollars"</div>
@@ -411,7 +411,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="establish-connection">
             <div class="section-header">ESTABLISH CONNECTION</div>
             <div class="contact-form">
                 <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">initiate_collaboration</span></div>
@@ -529,9 +529,13 @@
             }
         });
 
-        // Terminal click effects
+        // Terminal click effects with navigation
         document.querySelectorAll('.file-item').forEach(item => {
             item.addEventListener('click', () => {
+                const targetId = item.getAttribute('data-target');
+                const targetSection = document.getElementById(targetId);
+                
+                // Show terminal command
                 const prompt = document.createElement('div');
                 prompt.innerHTML = '<span style="color: #00ff00;">spufidoo@mainframe:~$ </span><span style="color: white;">accessing ' + item.querySelector('.file-name').textContent + '</span>';
                 prompt.style.position = 'fixed';
@@ -542,7 +546,18 @@
                 prompt.style.border = '1px solid #00ff00';
                 prompt.style.fontFamily = 'JetBrains Mono, monospace';
                 prompt.style.fontSize = '12px';
+                prompt.style.zIndex = '1001';
                 document.body.appendChild(prompt);
+                
+                // Smooth scroll to target section
+                if (targetSection) {
+                    setTimeout(() => {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 500);
+                }
                 
                 setTimeout(() => {
                     prompt.remove();
