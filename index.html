@@ -96,10 +96,12 @@
             padding: 5px 10px;
             margin: -20px -20px 20px -20px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
         }
 
         .system-info {
@@ -163,12 +165,13 @@
 
         .ascii-art {
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 8px;
             line-height: 1;
             color: #00ff00;
             text-align: center;
             margin: 2rem 0;
             white-space: pre;
+            overflow-x: auto;
         }
 
         .file-listing {
@@ -240,13 +243,14 @@
 
         .connection-status {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.9);
             border: 1px solid #00ff00;
-            padding: 10px;
-            font-size: 12px;
+            padding: 5px;
+            font-size: 10px;
             z-index: 100;
+            max-width: 150px;
         }
 
         .status-online {
@@ -310,13 +314,97 @@
             }
             
             .boot-sequence {
-                font-size: 12px;
+                font-size: 11px;
                 padding: 1rem;
+                line-height: 1.2;
             }
             
             .terminal {
+                margin: 5px;
+                padding: 10px;
+            }
+            
+            .terminal-header {
+                font-size: 10px;
+                padding: 3px 5px;
+                margin: -10px -10px 15px -10px;
+            }
+            
+            .system-info {
+                font-size: 9px;
+            }
+            
+            .section {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            
+            .section-header {
+                font-size: 12px;
+                padding: 3px 5px;
+                word-break: break-word;
+            }
+            
+            .ascii-art {
+                font-size: 6px;
+                margin: 1rem 0;
+                transform: scale(0.8);
+            }
+            
+            .file-item {
+                padding: 0.8rem;
+                margin: 0.5rem 0;
+            }
+            
+            .file-name {
+                font-size: 12px;
+                word-break: break-word;
+            }
+            
+            .file-desc {
+                font-size: 11px;
+                line-height: 1.3;
+            }
+            
+            .contact-form {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            
+            .input-line {
+                flex-direction: column;
+                align-items: flex-start;
+                margin: 0.5rem 0;
+            }
+            
+            .input-line input,
+            .input-line span.command {
+                margin-left: 0;
+                margin-top: 5px;
+                word-break: break-all;
+                font-size: 12px;
+            }
+            
+            .boot-line {
+                word-break: break-word;
+                white-space: normal;
+            }
+            
+            .connection-status {
+                position: relative;
+                top: auto;
+                right: auto;
                 margin: 10px;
-                padding: 15px;
+                width: calc(100% - 20px);
+                max-width: none;
+            }
+            
+            .cursor {
+                display: none;
+            }
+            
+            body {
+                cursor: auto;
             }
         }
     </style>
@@ -342,7 +430,7 @@
         <div class="boot-line error">WARNING: Conventional thinking detected - REJECTING</div>
         <div class="boot-line">Activating clause-free SQL environment... [OK]</div>
         <div class="boot-line warning">NOTICE: User 'spufidoo' logged in from Wales</div>
-        <div class="boot-line">System ready. Welcome to the mainframe rebellion.</div>
+        <div class="boot-line">System ready. Welcome to the rebellion.</div>
         <div class="progress-bar"><div class="progress-fill"></div></div>
     </div>
 
@@ -367,7 +455,7 @@
             <div class="section-header">SYSTEM STATUS</div>
             <div>
                 <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">whoami</span></div>
-                <div>SQL Rebel | Mainframe Specialist | Conference Speaker</div>
+                <div>BSc CITP CEng MBCS | Lead Product Developer | IBM Champion | UK Db2 User Group Chair | IBM Z and LinuxONE Influencer | STEM Ambassador | Raspberry Pi Educator | Code Club Volunteer | Open Mainframe Project Ambassador | International Conference Speaker</div>
                 <div>Location: Wales 🏴󠁧󠁢󠁷󠁬󠁳󠁿</div>
                 <div>Current Activity: Learning Rachmaninov Prélude Op. 3 No. 2</div>
                 <div>Status: Available for mainframe collaboration</div>
@@ -391,11 +479,11 @@
                     <div class="file-desc">Legacy system transformation without losing the soul of the mainframe</div>
                 </div>
                 <div class="file-item" data-target="speaking-log">
-                    <div class="file-name">CONFERENCE_TALKS.mp4/</div>
+                    <div class="file-name">CONFERENCE_TALKS/</div>
                     <div class="file-desc">Collection of presentations on SQL rebellion, mainframe mastery, and cost optimization</div>
                 </div>
                 <div class="file-item" data-target="establish-connection">
-                    <div class="file-name">PIANO_PRACTICE.mid</div>
+                    <div class="file-name">RACHMANINOV_PRACTICE.mid</div>
                     <div class="file-desc">Musical escape from the digital realm - Prélude in C# minor progression logs</div>
                 </div>
             </div>
@@ -415,7 +503,7 @@
         <section class="section" id="establish-connection">
             <div class="section-header">ESTABLISH CONNECTION</div>
             <div class="contact-form">
-                <div><span class="prompt">spufidoo@protonmail.com:~$</span> <span class="command">initiate_collaboration</span></div>
+                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">initiate_collaboration</span></div>
                 <div>Ready to collaborate on mainframe projects or discuss the art of clause-free SQL?</div>
                 <div>Connect via secure channels:</div>
                 <br>
@@ -425,7 +513,7 @@
                 </div>
                 <div class="input-line">
                     <span class="prompt">Email:</span>
-                    <span class="command">mailto:spufidoo@protonmail.com</span>
+                    <span class="command">spufidoo@protonmail.com</span>
                 </div>
                 <div class="input-line">
                     <span class="prompt">LinkedIn:</span>
