@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPUFIDOO - SYSTEM TERMINAL</title>
+    <meta name="description" content="Mainframe prodigy, IBM Champion, Lead Product Developer showcasing projects in SQL, Db2, z/OS, and modernizing mainframes.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="spufidoo · Mainframe Maverick">
+    <meta property="og:description" content="Lead Product Developer, IBM Champion, speaker and mainframe modernizer">
+    <meta property="og:image" content="URL_to_a_terminal-themed_image">
+    <meta property="og:url" content="https://spufidoo.github.io/">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap');
 
@@ -78,7 +85,7 @@
         }
 
         .terminal {
-            background: #000;
+            background: rgba(0, 0, 0, 0.7);
             border: 2px solid #00ff00;
             border-radius: 0;
             box-shadow: 
@@ -88,6 +95,7 @@
             margin: 20px auto;
             max-width: 1200px;
             position: relative;
+            z-index: 1;
         }
 
         .terminal-header {
@@ -218,7 +226,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.1;
+            opacity: 0.2;
         }
 
         .progress-bar {
@@ -571,38 +579,54 @@
         // Matrix effect
         function createMatrix() {
             const matrix = document.getElementById('matrix');
-            const chars = '01';
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
             const columns = Math.floor(window.innerWidth / 20);
             
             for (let i = 0; i < columns; i++) {
                 const column = document.createElement('div');
                 column.style.position = 'absolute';
                 column.style.left = i * 20 + 'px';
-                column.style.top = '-100px';
-                column.style.color = '#003300';
-                column.style.fontSize = '16px';
+                column.style.top = Math.random() * -500 + 'px';
+                column.style.color = 'rgba(0, 255, 0, 0.8)';
+                column.style.fontSize = '14px';
                 column.style.fontFamily = 'monospace';
-                column.style.animation = `fall ${Math.random() * 3 + 2}s linear infinite`;
-                column.style.animationDelay = Math.random() * 2 + 's';
+                column.style.lineHeight = '1.2';
+                column.style.pointerEvents = 'none';
                 
+                // Create the falling text
                 let text = '';
-                for (let j = 0; j < 20; j++) {
-                    text += chars.charAt(Math.floor(Math.random() * chars.length)) + '<br>';
+                const length = Math.random() * 15 + 10;
+                for (let j = 0; j < length; j++) {
+                    text += chars.charAt(Math.floor(Math.random() * chars.length)) + '\n';
                 }
-                column.innerHTML = text;
+                column.textContent = text;
                 matrix.appendChild(column);
+                
+                // Animate the falling
+                animateColumn(column);
             }
         }
 
-        // Add matrix fall animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to { transform: translateY(100vh); }
+        function animateColumn(column) {
+            let position = parseFloat(column.style.top);
+            const speed = Math.random() * 2 + 1;
+            
+            function fall() {
+                position += speed;
+                column.style.top = position + 'px';
+                
+                if (position > window.innerHeight) {
+                    position = Math.random() * -500 - 100;
+                    column.style.top = position + 'px';
+                }
+                
+                requestAnimationFrame(fall);
             }
-        `;
-        document.head.appendChild(style);
+            
+            fall();
+        }
 
+        // Remove the CSS animation style addition since we're using JS
         createMatrix();
 
         // Uptime counter
