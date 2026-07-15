@@ -70,10 +70,11 @@
             margin-bottom: 2rem;
         }
 
-        section h2 {
+        section h2,
+        .footer h2 {
             font-size: 13px;
             font-weight: 600;
-            color: var(--muted);
+            color: #fff;
             letter-spacing: 0.06em;
             margin-bottom: 0.75rem;
         }
@@ -120,6 +121,12 @@
             padding-top: 1rem;
             border-top: 1px solid var(--dim);
             font-size: 13px;
+            color: var(--muted);
+        }
+
+        .copyright {
+            margin-top: 1.5rem;
+            font-size: 12px;
             color: var(--muted);
         }
 
@@ -190,7 +197,7 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> skills</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> skills --list</h2>
             <div class="block compact"><span class="amber">DATABASES</span>
   IBM Db2 for z/OS · IBM Db2 LUW · SQL performance · DBA · Database DevOps
 
@@ -207,7 +214,7 @@ Technology survives, knowledge survives longer.</div>
         <section>
             <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> talks | wc -l</h2>
             <p class="block" style="margin-bottom: 0.75rem;">Segmentation fault (core dumped)</p>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> talks | sort | uniq | wc -l</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> tail -f /var/log/speaking.log</h2>
             <p class="block" style="margin-bottom: 0.75rem;">Headlines:</p>
             <ul class="talks block">
                 <li>DBA 2.0: Making change the DBA's Advantage</li>
@@ -253,13 +260,13 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <div class="footer">
-            <div class="block"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> uptime
-
-Career:     Still running
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> uptime</h2>
+            <div class="block">Career:     Still running
 Curiosity:  100%
 Coffee:     Required
 Retirement: Not yet</div>
             <p style="margin-top: 1rem;"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="cursor" aria-hidden="true"></span></p>
+            <p class="copyright">© 2026 Marcus Davage. All rights reserved.</p>
         </div>
     </div>
 </body>
