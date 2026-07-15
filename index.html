@@ -3,834 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPUFIDOO - SYSTEM TERMINAL</title>
-    <meta name="description" content="Mainframe prodigy, IBM Champion, Lead Product Developer showcasing projects in SQL, Db2, z/OS, and modernizing mainframes.">
+    <title>spufidoo — Marcus Davage</title>
+    <meta name="description" content="Marcus Davage — Mainframe Maverick, Lead Product Developer, IBM Champion, Db2 speaker.">
     <meta property="og:title" content="spufidoo · Mainframe Maverick">
-    <meta property="og:description" content="Lead Product Developer, IBM Champion, speaker and mainframe modernizer">
-    <meta property="og:image" content="URL_to_a_terminal-themed_image">
+    <meta property="og:description" content="SQL Rebel without a clause. Db2, IBM Z, and the art of persuading enterprise platforms to modernise.">
     <meta property="og:url" content="https://spufidoo.github.io/">
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --green: #33ff66;
+            --dim: #1a8f3a;
+            --muted: #8fbc8f;
+            --amber: #ffcc66;
+            --blue: #5eb3f5;
+            --bg: #0a0f0a;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'JetBrains Mono', 'Courier New', monospace;
-            background: #000000;
-            color: #00ff00;
-            overflow-x: hidden;
-            cursor: none;
+            background: var(--bg);
+            color: var(--green);
+            line-height: 1.55;
+            font-size: 15px;
         }
 
-        /* Custom cursor */
-        .cursor {
-            position: fixed;
-            width: 12px;
-            height: 16px;
-            background: #00ff00;
-            pointer-events: none;
-            z-index: 9999;
-            animation: blink 1s infinite;
+        .wrap {
+            max-width: 52rem;
+            margin: 0 auto;
+            padding: 1.5rem 1.25rem 3rem;
         }
 
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* CRT scanlines */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 255, 0, 0.03) 2px,
-                rgba(0, 255, 0, 0.03) 4px
-            );
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        /* CRT flicker */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 255, 0, 0.02);
-            pointer-events: none;
-            z-index: 999;
-            animation: flicker 0.15s infinite linear;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 1; }
-            98% { opacity: 1; }
-            99% { opacity: 0.98; }
-            100% { opacity: 1; }
-        }
-
-        .terminal {
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #00ff00;
-            border-radius: 0;
-            box-shadow: 
-                0 0 50px rgba(0, 255, 0, 0.3),
-                inset 0 0 50px rgba(0, 255, 0, 0.1);
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 1200px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .terminal-header {
-            background: #00ff00;
-            color: #000;
-            padding: 5px 10px;
-            margin: -20px -20px 20px -20px;
-            font-weight: bold;
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
-        .system-info {
-            font-size: 12px;
-        }
-
-        .boot-sequence {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 2rem;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .boot-line {
-            opacity: 0;
-            animation: typewriter 0.05s steps(1) forwards;
-            white-space: nowrap;
-            overflow: hidden;
-            margin-bottom: 2px;
-        }
-
-        @keyframes typewriter {
-            to { opacity: 1; }
-        }
-
-        .prompt {
-            color: #00ff00;
-            margin-right: 10px;
-        }
-
-        .command {
-            color: #ffffff;
-        }
-
-        .error {
-            color: #ff0000;
-        }
-
-        .warning {
-            color: #ffff00;
-        }
-
-        .linkedin {
-            color: #0080ff;
-        }
-
-        .social {
-            color: #ff00ff;
-        }
-
-        .github {
-            color: #00ffff;
-        }
-
-        .highlight {
-            color: #ff8000;
-        }
-
-        .accent {
-            color: #ff4080;
-        }
-
-        .section {
-            margin: 2rem 0;
-            padding: 0 2rem;
-        }
-
-        .section-header {
-            background: #00ff00;
-            color: #000;
-            padding: 5px 10px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 16px;
-            text-transform: uppercase;
-        }
-
-        .ascii-art {
-            font-family: 'Courier New', monospace;
-            font-size: 8px;
-            line-height: 1;
-            color: #00ff00;
-            text-align: center;
-            margin: 2rem 0;
-            white-space: pre;
-            overflow-x: auto;
-        }
-
-        .file-listing {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .file-item {
-            background: rgba(0, 255, 0, 0.05);
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            padding: 1rem;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .file-item:hover {
-            background: rgba(0, 255, 0, 0.1);
-            border-color: #00ff00;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-        }
-
-        .file-item::before {
-            content: '> ';
-            color: #00ff00;
-        }
-
-        .file-name {
-            color: #00ff00;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .file-desc {
-            color: #cccccc;
+        .banner {
+            border: 1px solid var(--dim);
+            padding: 0.75rem 1rem;
+            margin-bottom: 2rem;
+            color: var(--muted);
             font-size: 13px;
         }
 
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.2;
+        .banner strong { color: var(--green); }
+
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #333;
-            margin: 10px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #00ff00;
-            width: 0%;
-            animation: loading 3s ease-in-out forwards;
-        }
-
-        @keyframes loading {
-            to { width: 100%; }
-        }
-
-        .connection-status {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #00ff00;
-            padding: 5px;
-            font-size: 10px;
-            z-index: 100;
-            max-width: 150px;
-        }
-
-        .status-online {
-            color: #00ff00;
-        }
-
-        .piano-note {
-            position: fixed;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #00ff00;
-            pointer-events: none;
-            z-index: 1000;
-            animation: terminal-float 2s ease-out forwards;
-        }
-
-        @keyframes terminal-float {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-80px);
-            }
-        }
-
-        .contact-form {
-            background: rgba(0, 255, 0, 0.05);
-            border: 1px solid #00ff00;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .input-line {
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-line input {
-            background: transparent;
-            border: none;
-            color: #00ff00;
-            font-family: inherit;
+        .tagline {
+            color: var(--amber);
+            margin-bottom: 2rem;
             font-size: 14px;
-            outline: none;
-            flex: 1;
-            margin-left: 10px;
-            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
-            padding: 5px 0;
         }
 
-        .input-line input:focus {
-            border-bottom-color: #00ff00;
+        .prompt {
+            color: var(--dim);
+            user-select: none;
         }
 
-        .input-line a.command {
-            color: #00ff00;
-            text-decoration: none;
-            margin-left: 10px;
-            padding: 5px 0;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid transparent;
+        .prompt-tilde { color: var(--blue); }
+        .prompt-dollar { color: #fff; }
+
+        section {
+            margin-bottom: 2rem;
         }
 
-        .input-line a.command:hover {
-            color: #ffffff;
-            border-bottom-color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        section h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            margin-bottom: 0.75rem;
         }
 
-        @media (max-width: 768px) {
-            .file-listing {
-                grid-template-columns: 1fr;
-            }
-            
-            .boot-sequence {
-                font-size: 11px;
-                padding: 1rem;
-                line-height: 1.2;
-            }
-            
-            .terminal {
-                margin: 5px;
-                padding: 10px;
-            }
-            
-            .terminal-header {
-                font-size: 10px;
-                padding: 3px 5px;
-                margin: -10px -10px 15px -10px;
-            }
-            
-            .system-info {
-                font-size: 9px;
-            }
-            
-            .section {
-                padding: 1rem;
-                margin: 1rem 0;
-            }
-            
-            .section-header {
-                font-size: 12px;
-                padding: 3px 5px;
-                word-break: break-word;
-            }
-            
-            .ascii-art {
-                font-size: 6px;
-                margin: 1rem 0;
-                transform: scale(0.8);
-            }
-            
-            .file-item {
-                padding: 0.8rem;
-                margin: 0.5rem 0;
-            }
-            
-            .file-name {
-                font-size: 12px;
-                word-break: break-word;
-            }
-            
-            .file-desc {
-                font-size: 11px;
-                line-height: 1.3;
-            }
-            
-            .contact-form {
-                padding: 1rem;
-                margin: 1rem 0;
-            }
-            
-            .input-line {
-                flex-direction: column;
-                align-items: flex-start;
-                margin: 0.5rem 0;
-            }
-            
-            .input-line input,
-            .input-line span.command {
-                margin-left: 0;
-                margin-top: 5px;
-                word-break: break-all;
-                font-size: 12px;
-            }
-            
-            .boot-line {
-                word-break: break-word;
-                white-space: normal;
-            }
-            
-            .connection-status {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin: 10px;
-                width: calc(100% - 20px);
-                max-width: none;
-            }
-            
-            .cursor {
-                display: none;
-            }
-            
-            body {
-                cursor: auto;
-            }
+        .block {
+            white-space: pre-wrap;
+            color: var(--green);
+        }
+
+        .block .muted { color: var(--muted); }
+        .block .amber { color: var(--amber); }
+
+        ul.links {
+            list-style: none;
+            white-space: normal;
+            line-height: 1.35;
+        }
+
+        ul.links li {
+            margin: 0.15rem 0;
+        }
+
+        a {
+            color: var(--green);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        a:hover { color: #fff; }
+
+        .block.compact {
+            white-space: pre-line;
+            line-height: 1.35;
+        }
+
+        .talks {
+            white-space: normal;
+        }
+
+        .talks li { margin: 0.15rem 0; }
+
+        .footer {
+            margin-top: 2.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--dim);
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.55em;
+            height: 1em;
+            background: var(--green);
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            body { font-size: 14px; }
+            .wrap { padding: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="cursor"></div>
-    <div class="matrix-bg" id="matrix"></div>
-    
-    <div class="connection-status">
-        <div class="status-online">● CONNECTED</div>
-        <div>SESSION: spufidoo@mainframe</div>
-        <div>UPTIME: <span id="uptime">00:00:00</span></div>
-    </div>
-
-    <div class="boot-sequence" id="bootSequence">
-        <div class="boot-line">SYSTEM BOOT INITIATED...</div>
-        <div class="boot-line">Loading kernel modules... [OK]</div>
-        <div class="boot-line">Initializing maverick mainframe interfaces... [OK]</div>
-        <div class="boot-line">Starting SQL rebel protocols... [OK]</div>
-        <div class="boot-line">Mounting Welsh filesystem... [Now in a minute]</div>
-        <div class="boot-line">Loading Beethoven.mp3... [Pardon?]</div>
-        <div class="boot-line">Loading Rachmaninov.dll... [OK]</div>
-        <div class="boot-line error">WARNING: Conventional thinking detected - REJECTING</div>
-        <div class="boot-line warning">NOTICE: User 'spufidoo' logged in from Wales</div>
-        <div class="boot-line">Cursor.ai updates implemented.</div>
-        <div class="boot-line">System ready. Welcome to the rebellion.</div>
-        <div class="boot-line">Now wash your hands.</div>        
-        <div class="progress-bar"><div class="progress-fill"></div></div>
-    </div>
-
-    <div class="terminal" style="display: none;" id="mainTerminal">
-        <div class="terminal-header">
-            <span>SPUFIDOO SYSTEM TERMINAL v3.270</span>
-            <span class="system-info">SPUFIDOO.GITHUB.IO | SQL_REBEL_MODE: ACTIVE</span>
+    <div class="wrap">
+        <div class="banner">
+            <strong>SPUFIDOO SYSTEM TERMINAL v4.0</strong><br>
+            SQL_REBEL_MODE=ACTIVE · MAINFRAME_MAVERICK=TRUE
         </div>
 
-        <div class="ascii-art">
- ███████ ██████  ██    ██ ███████ ██ ██████   ██████   ██████  
- ██      ██   ██ ██    ██ ██      ██ ██   ██ ██    ██ ██    ██ 
- ███████ ██████  ██    ██ █████   ██ ██   ██ ██    ██ ██    ██ 
-      ██ ██      ██    ██ ██      ██ ██   ██ ██    ██ ██    ██ 
- ███████ ██       ██████  ██      ██ ██████   ██████   ██████  
-                                                               
-    >>> SQL REBEL WITHOUT A CLAUSE - MAINFRAME MAVERICK <<<
+        <h1>Marcus Davage, MBCS, CITP, CEng</h1>
+        <p class="tagline">SQL Rebel without a clause · Mainframe Maverick</p>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> whoami</h2>
+            <div class="block">Lead Product Developer (<a href="https://www.bmc.com/">BMC Software</a>)
+IBM Champion · Conference Speaker</a>
+<a href="https://www.openmainframeproject.org/">Open Mainframe Project</a> Ambassador
+STEM Ambassador · Certified Raspberry Pi Educator
+Co-chair, <a href="https://community.ibm.com/community/user/usergroup?CommunityKey=43504dec-3ea2-4cf6-807c-019be1225eac">UK Db2 User Group</a> · Co-host, <a href="https://www.idug.org/podcast">IDUG Db2 Table Talk Podcast</a>
+
+Location: Wales
+
+Status:
+Attempting to convince a 60-year-old enterprise platform
+that modern development practices are actually a good idea.</div>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> history</h2>
+            <div class="block"><span class="muted">1970s:</span>  Thought that computers were magic.
+<span class="muted">1980s:</span>  Learned that they mostly aren't.
+<span class="muted">1990s:</span>  Discovered databases.
+<span class="muted">2000s:</span>  Spent years persuading applications to behave.
+<span class="muted">2010s:</span>  Spent years persuading mainframes to behave.
+<span class="muted">2020s:</span>  Started coding applications that actually did behave.
+<span class="muted">Present:</span> Building bridges between traditional enterprise systems and modern engineering practices.</div>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> cat mission.txt</h2>
+            <div class="block">The mainframe doesn't need replacing, it needs understanding.
+
+My goal is to make IBM Z and Db2 more accessible
+to developers, administrators and future generations
+of engineers.
+
+Technology survives, knowledge survives longer.</div>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> skills</h2>
+            <div class="block compact"><span class="amber">DATABASES</span>
+  IBM Db2 for z/OS · IBM Db2 LUW · SQL performance · DBA · Database DevOps
+
+<span class="amber">PLATFORMS</span>
+  IBM Z · Linux · Windows · Raspberry Pi
+
+<span class="amber">DEVELOPER TOOLING</span>
+  VS Code · GitHub · Automation · Assembler · Rexx · C/C++ · Python · SQL
+
+<span class="amber">CURRENT EXPERIMENTS</span>
+  Agentic AI · Generative AI · AI-assisted operations · Developer productivity</div>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> talks | wc -l</h2>
+            <p class="block" style="margin-bottom: 0.75rem;">Segmentation fault (core dumped)</p>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> talks | sort | uniq | wc -l</h2>
+            <p class="block" style="margin-bottom: 0.75rem;">Headlines:</p>
+            <ul class="talks block">
+                <li>DBA 2.0: Making change the DBA's Advantage</li>
+                <li>And now for something completely useful - Python and Db2</li>
+                <li>Driving Down Database Development Dollars</li>
+                <li>Db2 by the Back Door</li>
+                <li>Comparing a Porsche to a Mainframe</li>
+                <li>"Your Data or Your Life!"</li>
+                <li>A Row's Life</li>
+                <li>Claims, Drains and Automobiles</li>
+                <li>Db2 under siege</li>
+                <li>Squeeze Your Data with Db2</li>
+                <li>Express Yourself!</li>
+            </ul>
+            <p class="block" style="margin-top: 0.75rem;">Result: Still somehow invited back.</p>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> current_focus</h2>
+            <div class="block compact">[1] Exploring agentic AI for database operations
+[2] Making complex enterprise technology easier to understand
+[3] Helping modern developers discover the mainframe is still relevant
+[4] Building tools that remove repetitive work
+[5] Learning things I'm not supposed to know yet</div>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> fortune</h2>
+            <div class="block compact">"SQL Rebel without a clause."
+"Never trust a database that reports everything is fine."
+"Somebody has to explain the mainframe to the AI."</div>
+        </section>
+
+        <section>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> connect</h2>
+            <ul class="links block">
+                <li><a href="https://www.linkedin.com/in/marcusdavage/">LinkedIn</a></li>
+                <li><a href="https://github.com/spufidoo">GitHub</a></li>
+                <li><a href="https://beacons.ai/spufidoo">beacons.ai/spufidoo</a></li>
+                <li><a href="https://open.spotify.com/show/5Rnpoova3LGE6HO9XvsM11">Db2 Table Talk (podcast)</a></li>
+                <li><a href="mailto:spufidoo@protonmail.com">spufidoo@protonmail.com</a></li>
+            </ul>
+        </section>
+
+        <div class="footer">
+            <div class="block"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> uptime
+
+Career:     Still running
+Curiosity:  100%
+Coffee:     Required
+Retirement: Not yet</div>
+            <p style="margin-top: 1rem;"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="cursor" aria-hidden="true"></span></p>
         </div>
-
-        <section class="section" id="system-status">
-            <div class="section-header">SYSTEM STATUS</div>
-            <div>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">whoami</span></div>
-                <div><a href="https://www.linkedin.com/in/marcusdavage/" class="highlight" target="_blank" rel="noopener">Marcus Davage</a> | <a href="https://www.bcs.org/" class="command" target="_blank" rel="noopener">BSc CITP CEng MBCS</a> | <a href="https://www.bmc.com/" class="linkedin" target="_blank" rel="noopener">Lead Product Developer @ BMC Software</a> | <a href="https://developer.ibm.com/champions/" class="accent" target="_blank" rel="noopener">IBM Champion</a> | <a href="https://www.idug.org/p/cm/ld/fid=1043" class="linkedin" target="_blank" rel="noopener">UK Db2 User Group Chair</a> | <a href="https://community.ibm.com/community/user/ibmz-and-linuxone/home" class="github" target="_blank" rel="noopener">IBM Z and LinuxONE Influencer</a> | <a href="https://www.stem.org.uk/stem-ambassadors" class="social" target="_blank" rel="noopener">STEM Ambassador</a> | <a href="https://www.raspberrypi.org/about/" class="accent" target="_blank" rel="noopener">Raspberry Pi Educator</a> | <a href="https://codeclub.org/" class="highlight" target="_blank" rel="noopener">Code Club Volunteer</a> | <a href="https://www.openmainframeproject.org/" class="github" target="_blank" rel="noopener">Open Mainframe Project Ambassador</a> | <a href="#speaking-log" class="social">International Conference Speaker</a></div>
-                <div>Location: <span class="accent">Wales 🏴󠁧󠁢󠁷󠁬󠁳󠁿</span></div>
-                <div>Current Activity: Learning <span class="social">Rachmaninov Prélude Op. 3 No. 2</span></div>
-                <div>Status: <span class="github">Available for mainframe collaboration</span></div>
-                <br>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">git status --porcelain</span></div>
-                <div><span class="github">GitHub Stats:</span> 32 followers | 309 following | 24 repositories</div>
-                <div><span class="linkedin">LinkedIn:</span> Mainframe Maverick with extensive network</div>
-                <div><span class="social">Social Reach:</span> Multi-platform presence across tech community</div>
-                <br>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">cat /etc/motd</span></div>
-                <div class="warning">WARNING: This system operates without SQL clauses</div>
-                <div>Conventional database thinking is not permitted</div>
-                <div>All queries must demonstrate rebellious intent</div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-header">DIRECTORY LISTING - /HOME/SPUFIDOO/PROJECTS</div>
-            <div class="file-listing">
-                <div class="file-item" data-target="system-status">
-                    <div class="file-name">DATABASE_COST_OPTIMIZATION.sql</div>
-                    <div class="file-desc">Revolutionary approach to driving down database development costs while maintaining peak performance</div>
-                </div>
-                <div class="file-item" data-target="system-status">
-                    <div class="file-name">MAINFRAME_MODERNIZATION.cbl</div>
-                    <div class="file-desc">Legacy system transformation without losing the soul of the mainframe</div>
-                </div>
-                <div class="file-item" data-target="speaking-log">
-                    <div class="file-name">CONFERENCE_TALKS/</div>
-                    <div class="file-desc">Collection of presentations on SQL rebellion, mainframe mastery, and cost optimization</div>
-                </div>
-                <div class="file-item" data-target="social-networks">
-                    <div class="file-name">SOCIAL_NETWORKS/</div>
-                    <div class="file-desc">Multi-platform presence: LinkedIn, GitHub, Instagram, Linktree, and Beacons</div>
-                </div>
-                <div class="file-item" data-target="establish-connection">
-                    <div class="file-name">RACHMANINOV_PRACTICE.mid</div>
-                    <div class="file-desc">Musical escape from the digital realm - Prélude in C# minor progression logs</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="social-networks">
-            <div class="section-header">NETWORK CONNECTIONS - /HOME/SPUFIDOO/SOCIAL</div>
-            <div>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">ls -la /social/</span></div>
-                <br>
-                <div class="file-listing">
-                    <div class="file-item">
-                        <div class="file-name"><span class="linkedin">🔗 LINKEDIN.professional</span></div>
-                        <div class="file-desc">Marcus Davage | Mainframe Maverick at BMC Software</div>
-                        <div style="margin-top: 10px;">
-                            <span class="prompt">connect:</span>
-                            <a href="https://www.linkedin.com/in/marcusdavage/" class="linkedin" target="_blank" rel="noopener">linkedin.com/in/marcusdavage</a>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-name"><span class="github">📁 GITHUB.repositories</span></div>
-                        <div class="file-desc">24 repositories | Codio, tso-xmas, and mainframe innovations</div>
-                        <div style="margin-top: 10px;">
-                            <span class="prompt">clone:</span>
-                            <a href="https://github.com/spufidoo" class="github" target="_blank" rel="noopener">github.com/spufidoo</a>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-name"><span class="social">📸 INSTAGRAM.lifestyle</span></div>
-                        <div class="file-desc">Behind the scenes of a mainframe maverick's life</div>
-                        <div style="margin-top: 10px;">
-                            <span class="prompt">follow:</span>
-                            <a href="https://www.instagram.com/spufidoo" class="social" target="_blank" rel="noopener">instagram.com/spufidoo</a>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-name"><span class="highlight">🌟 LINKTREE.hub</span></div>
-                        <div class="file-desc">Central command for all social connections and resources</div>
-                        <div style="margin-top: 10px;">
-                            <span class="prompt">access:</span>
-                            <a href="https://linktr.ee/spufidoo" class="highlight" target="_blank" rel="noopener">linktr.ee/spufidoo</a>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-name"><span class="accent">🚀 BEACONS.platform</span></div>
-                        <div class="file-desc">Advanced social link management and engagement platform</div>
-                        <div style="margin-top: 10px;">
-                            <span class="prompt">navigate:</span>
-                            <a href="https://beacons.ai/spufidoo" class="accent" target="_blank" rel="noopener">beacons.ai/spufidoo</a>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">social_media_stats --summary</span></div>
-                <div><span class="linkedin">[LINKEDIN]</span> Professional network in mainframe and database communities</div>
-                <div><span class="github">[GITHUB]</span> Open source contributions and mainframe modernization projects</div>
-                <div><span class="social">[INSTAGRAM]</span> Personal insights into the life of a tech professional</div>
-                <div><span class="highlight">[LINKTREE]</span> Comprehensive link collection for all platforms</div>
-                <div><span class="accent">[BEACONS]</span> Advanced social presence management</div>
-                <br>
-                <div class="ascii-art" style="font-size: 6px; color: #ff4080;">
-     ╔══════════════════════════════════════════════════════╗
-     ║  📱 SOCIAL NETWORK INTERFACE INITIALIZED             ║
-     ║  ┌─────────────────────────────────────────────────┐ ║
-     ║  │ LinkedIn: Professional Mainframe Community      │ ║
-     ║  │ GitHub: Code Repositories & Open Source         │ ║
-     ║  │ Instagram: Personal Tech Life Documentation     │ ║
-     ║  │ Linktree: Centralized Link Management           │ ║
-     ║  │ Beacons: Advanced Social Platform Hub           │ ║
-     ║  └─────────────────────────────────────────────────┘ ║
-     ║  STATUS: ALL SYSTEMS ONLINE ✓                        ║
-     ╚══════════════════════════════════════════════════════╝
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="speaking-log">
-            <div class="section-header">RECENT SYSTEM LOG - /VAR/LOG/SPEAKING.LOG</div>
-            <div>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">tail -f /var/log/speaking.log</span></div>
-                <br>
-                <div><span class="linkedin">[INFO]</span> Successfully executed presentation: <a href="https://www.youtube.com/watch?v=WQ4ZY-rgB-8" class="highlight" target="_blank" rel="noopener">"Driving Down Database Development Dollars"</a></div>
-                <div><span class="accent">[SUCCESS]</span> GSE UK Virtual Conference - March 2025</div>
-                <div><span class="social">[FEATURED]</span> <a href="https://www.youtube.com/watch?v=L6GPgtnnxas" class="social" target="_blank" rel="noopener">Interview with Tech Sharmit</a> - March 2025</div>
-                <div><span class="github">[INFO]</span> <a href="https://www.youtube.com/watch?v=ygCHmRFD5%5Fo" class="github" target="_blank" rel="noopener">"Comparing a Porsche to a Mainframe"</a> - Mainframerz Meetup</div>
-                <div><span class="linkedin">[SUCCESS]</span> IDUG EMEA Conference presentations - October 2024</div>
-                <div>&nbsp;&nbsp;├── <a href="https://vimeo.com/1029919062/35385d9227" class="linkedin" target="_blank" rel="noopener">"Driving Down Database Development Dollars"</a></div>
-                <div>&nbsp;&nbsp;└── <a href="https://vimeo.com/1029990584/6cd4a0210d" class="warning" target="_blank" rel="noopener">"Your data or your life!" - What DORA means for your Db2 Database</a></div>
-                <div><span class="highlight">[MULTILINGUAL]</span> <a href="https://www.youtube.com/watch?v=Ppg3ac9nMao" class="highlight" target="_blank" rel="noopener">"Cyflwyniad i Godio"</a> - Welsh language coding presentation</div>
-                <div><span class="accent">[COMMUNITY]</span> <a href="https://www.youtube.com/watch?v=9YLoS1NSC9A&t=12468s" class="accent" target="_blank" rel="noopener">"Blowing Raspberries or Speaking in Tongues"</a> - Raspberry Pi Conference</div>
-                <div><span class="github">[ARCHIVE]</span> <a href="https://www.youtube.com/watch?v=0CtoIH1YWok" class="github" target="_blank" rel="noopener">"A Row's Life"</a> - Db2 Night Show (Jan 2023)</div>
-                <div><span class="social">[LEGACY]</span> <a href="https://www.youtube.com/watch?v=kH2iPkdTcrM" class="social" target="_blank" rel="noopener">"A new term on the Mainframe"</a> - Mainframerz Meetup (Sep 2021)</div>
-                <div class="warning">[WARN] Conventional SQL approaches detected in audience - corrective education applied</div>
-                <div><span class="github">[INFO]</span> Conference circuit engagement status: ACTIVE</div>
-                <div><span class="social">[STATUS]</span> Mainframe collaboration requests: OPEN</div>
-                <br>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">conference_stats --recent</span></div>
-                <div><span class="highlight">Recent Video Talks:</span></div>
-                <div>├── <span class="linkedin">Professional:</span> <a href="https://youtu.be/NZQYxr1eUKQ" class="linkedin" target="_blank" rel="noopener">Database Development Dollars</a> (Virtual Db2 UG)</div>
-                <div>├── <span class="accent">Community:</span> <a href="https://www.youtube.com/watch?v=pgN4MCnGZyI" class="accent" target="_blank" rel="noopener">Introduction to Coding</a> (Bridgend Digital Futures)</div>
-                <div>├── <span class="github">Technical:</span> <a href="https://www.youtube.com/watch?v=V-5dqnTd09k" class="github" target="_blank" rel="noopener">Linux on IBM Mainframe Z</a> (South Wales LUG)</div>
-                <div>├── <span class="social">Champions:</span> <a href="https://www.youtube.com/watch?v=9gEuMiu0MR8" class="social" target="_blank" rel="noopener">IBM Champions</a> (Mainframerz Meetup)</div>
-                <div>└── <span class="highlight">Corporate:</span> <a href="https://www.youtube.com/watch?v=8WNoVMPg1Ww&pp=ygUNbWFyY3VzIGRhdmFnZQ%3D%3D" class="highlight" target="_blank" rel="noopener">Digital Transformation Mindset</a> (BMC Software)</div>
-                <br>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">echo "Total video presentations: 15+ | All systems: LIVE"</span></div>
-                <div><span class="accent">Total video presentations: 15+ | All systems: LIVE</span></div>
-            </div>
-        </section>
-
-        <section class="section" id="establish-connection">
-            <div class="section-header">ESTABLISH CONNECTION</div>
-            <div class="contact-form">
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">initiate_collaboration</span></div>
-                <div>Ready to collaborate on mainframe projects or discuss the art of clause-free SQL?</div>
-                <div><span class="highlight">Connect via secure channels:</span></div>
-                <br>
-                <div class="input-line">
-                    <span class="prompt github">🔷 GitHub:</span>
-                    <a href="https://github.com/spufidoo" class="github" target="_blank" rel="noopener">github.com/spufidoo</a>
-                </div>
-                <div class="input-line">
-                    <span class="prompt linkedin">🔗 LinkedIn:</span>
-                    <a href="https://www.linkedin.com/in/marcusdavage/" class="linkedin" target="_blank" rel="noopener">linkedin.com/in/marcusdavage</a>
-                </div>
-                <div class="input-line">
-                    <span class="prompt social">📱 Instagram:</span>
-                    <a href="https://www.instagram.com/spufidoo" class="social" target="_blank" rel="noopener">instagram.com/spufidoo</a>
-                </div>
-                <div class="input-line">
-                    <span class="prompt highlight">🌟 Linktree:</span>
-                    <a href="https://linktr.ee/spufidoo" class="highlight" target="_blank" rel="noopener">linktr.ee/spufidoo</a>
-                </div>
-                <div class="input-line">
-                    <span class="prompt accent">🚀 Beacons:</span>
-                    <a href="https://beacons.ai/spufidoo" class="accent" target="_blank" rel="noopener">beacons.ai/spufidoo</a>
-                </div>
-                <div class="input-line">
-                    <span class="prompt">📧 Email:</span>
-                    <a href="mailto:spufidoo@protonmail.com" class="command">spufidoo@protonmail.com</a>
-                </div>
-                <br>
-                <div><span class="prompt">spufidoo@mainframe:~$</span> <span class="command">echo "Connection established. Welcome to the rebellion."</span></div>
-                <div><span class="accent">Connection established. Welcome to the rebellion.</span></div>
-                <br>
-                <div class="warning">Now wash your hands.</div>
-            </div>
-        </section>
     </div>
-
-    <script>
-        // Custom cursor
-        const cursor = document.querySelector('.cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        // Boot sequence
-        const bootLines = document.querySelectorAll('.boot-line');
-        const bootSequence = document.getElementById('bootSequence');
-        const mainTerminal = document.getElementById('mainTerminal');
-
-        let delay = 0;
-        bootLines.forEach((line, index) => {
-            setTimeout(() => {
-                line.style.animationDelay = '0s';
-                line.style.opacity = '1';
-                
-                if (index === bootLines.length - 1) {
-                    setTimeout(() => {
-                        bootSequence.style.display = 'none';
-                        mainTerminal.style.display = 'block';
-                    }, 2000);
-                }
-            }, delay);
-            delay += Math.random() * 200 + 100;
-        });
-
-        // Matrix effect
-        function createMatrix() {
-            const matrix = document.getElementById('matrix');
-            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-            const columns = Math.floor(window.innerWidth / 20);
-            
-            for (let i = 0; i < columns; i++) {
-                const column = document.createElement('div');
-                column.style.position = 'absolute';
-                column.style.left = i * 20 + 'px';
-                column.style.top = Math.random() * -500 + 'px';
-                column.style.color = 'rgba(0, 255, 0, 0.8)';
-                column.style.fontSize = '14px';
-                column.style.fontFamily = 'monospace';
-                column.style.lineHeight = '1.2';
-                column.style.pointerEvents = 'none';
-                
-                // Create the falling text
-                let text = '';
-                const length = Math.random() * 15 + 10;
-                for (let j = 0; j < length; j++) {
-                    text += chars.charAt(Math.floor(Math.random() * chars.length)) + '\n';
-                }
-                column.textContent = text;
-                matrix.appendChild(column);
-                
-                // Animate the falling
-                animateColumn(column);
-            }
-        }
-
-        function animateColumn(column) {
-            let position = parseFloat(column.style.top);
-            const speed = Math.random() * 2 + 1;
-            
-            function fall() {
-                position += speed;
-                column.style.top = position + 'px';
-                
-                if (position > window.innerHeight) {
-                    position = Math.random() * -500 - 100;
-                    column.style.top = position + 'px';
-                }
-                
-                requestAnimationFrame(fall);
-            }
-            
-            fall();
-        }
-
-        // Remove the CSS animation style addition since we're using JS
-        createMatrix();
-
-        // Uptime counter
-        let startTime = Date.now();
-        setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const hours = Math.floor(elapsed / 3600000).toString().padStart(2, '0');
-            const minutes = Math.floor((elapsed % 3600000) / 60000).toString().padStart(2, '0');
-            const seconds = Math.floor((elapsed % 60000) / 1000).toString().padStart(2, '0');
-            document.getElementById('uptime').textContent = `${hours}:${minutes}:${seconds}`;
-        }, 1000);
-
-        // Musical easter egg with terminal aesthetic
-        document.addEventListener('click', (e) => {
-            if (Math.random() > 0.7) {
-                const note = document.createElement('div');
-                note.className = 'piano-note';
-                const notes = [
-                    'C♯', 'D♭', 'F♯', 'G♯', 'A♭', '♪', '♫', '♬', '♩', '♭', '♮', '♯', '𝄞', '𝄢', '𝄡', '</>',
-                    '𝄫', '𝄪', '𝄬', '𝄭', '𝄮', '𝄯', '𝄰', '𝄱', '𝄲', '𝄳', '𝄴', '𝄵', '𝄽', '𝄾', '𝄿'
-                ];
-                note.textContent = notes[Math.floor(Math.random() * notes.length)];
-                note.style.left = e.clientX + 'px';
-                note.style.top = e.clientY + 'px';
-                document.body.appendChild(note);
-                
-                setTimeout(() => {
-                    note.remove();
-                }, 2000);
-            }
-        });
-
-        // Terminal click effects with navigation
-        document.querySelectorAll('.file-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const targetId = item.getAttribute('data-target');
-                const targetSection = document.getElementById(targetId);
-                
-                // Show terminal command
-                const prompt = document.createElement('div');
-                prompt.innerHTML = '<span style="color: #00ff00;">spufidoo@mainframe:~$ </span><span style="color: white;">accessing ' + item.querySelector('.file-name').textContent + '</span>';
-                prompt.style.position = 'fixed';
-                prompt.style.bottom = '20px';
-                prompt.style.left = '20px';
-                prompt.style.background = 'rgba(0,0,0,0.9)';
-                prompt.style.padding = '10px';
-                prompt.style.border = '1px solid #00ff00';
-                prompt.style.fontFamily = 'JetBrains Mono, monospace';
-                prompt.style.fontSize = '12px';
-                prompt.style.zIndex = '1001';
-                document.body.appendChild(prompt);
-                
-                // Smooth scroll to target section
-                if (targetSection) {
-                    setTimeout(() => {
-                        targetSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }, 500);
-                }
-                
-                setTimeout(() => {
-                    prompt.remove();
-                }, 2000);
-            });
-        });
-    </script>
 </body>
 </html>
