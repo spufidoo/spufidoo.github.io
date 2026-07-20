@@ -66,16 +66,26 @@
         .prompt-tilde { color: var(--blue); }
         .prompt-dollar { color: #fff; }
 
+        .command {
+            color: #fff;
+        }
+
         section {
             margin-bottom: 2rem;
         }
 
-        section h2 {
+        section h2,
+        .footer h2,
+        .footer-prompt {
             font-size: 13px;
             font-weight: 600;
-            color: var(--muted);
             letter-spacing: 0.06em;
             margin-bottom: 0.75rem;
+        }
+
+        .footer-prompt {
+            margin-top: 1rem;
+            margin-bottom: 0;
         }
 
         .block {
@@ -123,6 +133,12 @@
             color: var(--muted);
         }
 
+        .copyright {
+            margin-top: 1.5rem;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
         .cursor {
             display: inline-block;
             width: 0.55em;
@@ -136,13 +152,85 @@
             50% { opacity: 0; }
         }
 
+        .boot-sequence {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem 1.25rem;
+            font-size: 14px;
+            line-height: 1.4;
+            max-width: 52rem;
+            margin: 0 auto;
+        }
+
+        .boot-line {
+            opacity: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-bottom: 2px;
+        }
+
+        .boot-sequence .error { color: #ff4444; }
+        .boot-sequence .warning { color: var(--amber); }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #1a2a1a;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            width: 0%;
+            animation: boot-loading 3s ease-in-out forwards;
+        }
+
+        @keyframes boot-loading {
+            to { width: 100%; }
+        }
+
+        .main-content {
+            display: none;
+        }
+
         @media (max-width: 600px) {
             body { font-size: 14px; }
             .wrap { padding: 1rem; }
+
+            .boot-sequence {
+                font-size: 12px;
+                padding: 1rem;
+            }
+
+            .boot-line {
+                white-space: normal;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="boot-sequence" id="bootSequence">
+        <div class="boot-line">SYSTEM BOOT INITIATED...</div>
+        <div class="boot-line">Loading kernel modules... [OK]</div>
+        <div class="boot-line">Initializing maverick mainframe interfaces... [OK]</div>
+        <div class="boot-line">Starting SQL rebel protocols... [OK]</div>
+        <div class="boot-line">Mounting Welsh filesystem... [Now in a minute]</div>
+        <div class="boot-line">Loading Beethoven.mp3... [Pardon?]</div>
+        <div class="boot-line">Loading Rachmaninov.dll... [OK]</div>
+        <div class="boot-line error">WARNING: Conventional thinking detected - REJECTING</div>
+        <div class="boot-line warning">NOTICE: User 'spufidoo' logged in from Wales</div>
+        <div class="boot-line">SPUFIDOO SYSTEM TERMINAL v4.0 online.</div>
+        <div class="boot-line">System ready. Welcome to the rebellion.</div>
+        <div class="boot-line">Now wash your hands.</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+
+    <div class="main-content" id="mainContent">
     <div class="wrap">
         <div class="banner">
             <strong>SPUFIDOO SYSTEM TERMINAL v4.0</strong><br>
@@ -153,7 +241,7 @@
         <p class="tagline">SQL Rebel without a clause · Mainframe Maverick</p>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> whoami</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">whoami</span></h2>
             <div class="block">Lead Product Developer (<a href="https://www.bmc.com/">BMC Software</a>)
 IBM Champion · Conference Speaker</a>
 <a href="https://www.openmainframeproject.org/">Open Mainframe Project</a> Ambassador
@@ -166,7 +254,7 @@ Attempting to convince a 60-year-old enterprise platform that modern development
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> history</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">history</span></h2>
             <div class="block"><span class="muted">1970s:</span>  Thought that computers were magic.
 <span class="muted">1980s:</span>  Learned that they mostly aren't.
 <span class="muted">1990s:</span>  Discovered databases.
@@ -177,7 +265,7 @@ Attempting to convince a 60-year-old enterprise platform that modern development
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> cat mission.txt</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">cat mission.txt</span></h2>
             <div class="block">The mainframe doesn't need replacing, it needs understanding.
 
 My goal is to make IBM Z and Db2 more accessible to developers, administrators and future generations of engineers.
@@ -186,7 +274,7 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> skills</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">skills --list</span></h2>
             <div class="block compact"><span class="amber">DATABASES</span>
   IBM Db2 for z/OS · IBM Db2 LUW · SQL performance · DBA · Database DevOps
 
@@ -201,9 +289,9 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> talks | wc -l</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">talks | wc -l</span></h2>
             <p class="block" style="margin-bottom: 0.75rem;">Segmentation fault (core dumped)</p>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> talks | sort | uniq | wc -l</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">tail -f /var/log/speaking.log</span></h2>
             <p class="block" style="margin-bottom: 0.75rem;">Headlines:</p>
             <ul class="talks block">
                 <li>DBA 2.0: Making change the DBA's Advantage</li>
@@ -222,7 +310,7 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> current_focus</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">current_focus</span></h2>
             <div class="block compact">[1] Exploring agentic AI for database operations
 [2] Making complex enterprise technology easier to understand
 [3] Helping modern developers discover the mainframe is still relevant
@@ -231,14 +319,14 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> fortune</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">fortune</span></h2>
             <div class="block compact">"SQL Rebel without a clause."
 "Never trust a database that reports everything is fine."
 "Somebody has to explain the mainframe to the AI."</div>
         </section>
 
         <section>
-            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> connect</h2>
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">connect</span></h2>
             <ul class="links block">
                 <li><a href="https://www.linkedin.com/in/marcusdavage/">LinkedIn</a></li>
                 <li><a href="https://github.com/spufidoo">GitHub</a></li>
@@ -249,14 +337,36 @@ Technology survives, knowledge survives longer.</div>
         </section>
 
         <div class="footer">
-            <div class="block"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> uptime
-
-Career:     Still running
+            <h2><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="command">uptime</span></h2>
+            <div class="block">Career:     Still running
 Curiosity:  100%
 Coffee:     Required
 Retirement: Not yet</div>
-            <p style="margin-top: 1rem;"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="cursor" aria-hidden="true"></span></p>
+            <p class="footer-prompt"><span class="prompt">spufidoo@mainframe:<span class="prompt-tilde">~</span><span class="prompt-dollar">$</span></span> <span class="cursor" aria-hidden="true"></span></p>
+            <p class="copyright">© 2026 Marcus Davage. All rights reserved.</p>
         </div>
     </div>
+    </div>
+
+    <script>
+        const bootLines = document.querySelectorAll('.boot-line');
+        const bootSequence = document.getElementById('bootSequence');
+        const mainContent = document.getElementById('mainContent');
+
+        let delay = 0;
+        bootLines.forEach((line, index) => {
+            setTimeout(() => {
+                line.style.opacity = '1';
+
+                if (index === bootLines.length - 1) {
+                    setTimeout(() => {
+                        bootSequence.style.display = 'none';
+                        mainContent.style.display = 'block';
+                    }, 2000);
+                }
+            }, delay);
+            delay += Math.random() * 200 + 100;
+        });
+    </script>
 </body>
 </html>
